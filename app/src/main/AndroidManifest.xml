@@ -34,6 +34,7 @@
     <uses-permission android:name="cn.nubia.launcher2.permission.WRITE_SETTINGS" />
     <uses-permission android:name="net.oneplus.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="net.oneplus.launcher.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -48,6 +49,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".PerimissionActivity"/>
     </application>
 
 </manifest>

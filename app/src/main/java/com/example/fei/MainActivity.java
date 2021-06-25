@@ -4,18 +4,31 @@ import android.Manifest;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 
-import com.feilib.permission.PermissionHeadle;
+public class MainActivity extends Activity implements AdapterView.OnItemClickListener{
+    protected Context mContext;
+    protected ListView mListView;
+    protected String[] mListName = {"权限"};
 
-public class MainActivity extends Activity {
-    private Context mContext;
-    private final String[] mListName = {"权限"};
-    private ListView mListView;
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        switch (position){
+            case 0:
+                stayActivity(PerimissionActivity.class);
+                break;
+            default:
+                break;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,25 +37,37 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         mContext = MainActivity.this;
 
-        initView();
+        mListView = findViewById(R.id.main_lv);
+
+        initListView();
     }
 
-    private void initView(){
-        mListView = findViewById(R.id.main_lv);
+    public void logE(String msg){
+        int level = 1;
+        StackTraceElement[] stacks = new Throwable().getStackTrace();
+        String methodName = stacks[level].getMethodName();
+        String className = stacks[level].getClassName();
+        Log.e(className, " " + methodName + "  msg:" + msg);
+    }
+
+    public void logI(String msg){
+        int level = 1;
+        StackTraceElement[] stacks = new Throwable().getStackTrace();
+        String methodName = stacks[level].getMethodName();
+        String className = stacks[level].getClassName();
+        Log.i(className, " " + methodName + "  msg:" + msg);
+    }
+
+    public void showToat(String msg){
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    protected void initListView(){
         mListView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mListName));
+        mListView.setOnItemClickListener(this);
+    }
 
-        mListView.setOnItemClickListener((parent, view, position, id) -> {
-            String str = "" + mListName[position];
-            Toast.makeText(mContext, str, Toast.LENGTH_LONG).show();
-
-            PermissionHeadle permissionHeadle = new PermissionHeadle(this);
-            permissionHeadle.need(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE} );
-            permissionHeadle.requestPremission(new PermissionHeadle.Subscribe() {
-                @Override
-                public void onResult(boolean allGranted, String[] permissions) {
-                    Toast.makeText(MainActivity.this, "状态：" + allGranted, Toast.LENGTH_SHORT).show();
-                }
-            });
-        });
+    private void stayActivity(Class<?> cls){
+        MainActivity.this.startActivity(new Intent(MainActivity.this, cls));
     }
 }
