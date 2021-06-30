@@ -52,7 +52,7 @@ public class PermissionHeadle {
      * 权限订阅
      */
     public interface Subscribe{
-        void onResult(boolean allGranted, ArrayList grantedList, ArrayList deniedList);
+        void onResult(boolean allGranted, ArrayList<String> grantedList, ArrayList<String> deniedList);
     }
 
     public interface onResult{

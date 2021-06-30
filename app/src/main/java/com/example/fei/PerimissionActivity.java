@@ -14,25 +14,20 @@ public class PerimissionActivity extends MainActivity implements AdapterView.OnI
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        showToat("点击了" + position);
         switch (position) {
             case 0:
-                normal();
+                String[] permissionStr = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE};
+                new PermissionHeadle(this).need(permissionStr)
+                        .requestPremission(new PermissionHeadle.Subscribe() {
+                            @Override
+                            public void onResult(boolean allGranted, ArrayList<String> grantedList, ArrayList<String> deniedList) {
+                                showToat("状态：" + allGranted);
+                            }
+                        });
                 break;
             default:
                 break;
         }
-    }
-
-    private void normal() {
-        String[] permissionStr = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE};
-        new PermissionHeadle(this).need(permissionStr)
-                .requestPremission(new PermissionHeadle.Subscribe() {
-                    @Override
-                    public void onResult(boolean allGranted, ArrayList grantedList, ArrayList deniedList) {
-                        showToat("状态：" + allGranted);
-                    }
-                });
     }
 
     @Override

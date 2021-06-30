@@ -17,7 +17,7 @@ import android.widget.FrameLayout;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-public class KeyboradHandle {
+public class KeyboradUtil {
     private  View mChildOfContent;
     private int usableHeightPrevious;
     private FrameLayout.LayoutParams frameLayoutParams;
@@ -26,10 +26,10 @@ public class KeyboradHandle {
     private int statusBarHeight;
 
     public static void assistActivity(Activity activity) {
-        new KeyboradHandle(activity);
+        new KeyboradUtil(activity);
     }
 
-    private KeyboradHandle(Activity activity) {
+    private KeyboradUtil(Activity activity) {
         try{
             activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
             //获取状态栏的高度
