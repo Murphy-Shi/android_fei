@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import com.feilib.permission.PermissionHeadle;
+import com.feilib.tool.PermissionUtil;
 
 import java.util.ArrayList;
 
@@ -17,8 +17,8 @@ public class PerimissionActivity extends MainActivity implements AdapterView.OnI
         switch (position) {
             case 0:
                 String[] permissionStr = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE};
-                new PermissionHeadle(this).need(permissionStr)
-                        .requestPremission(new PermissionHeadle.Subscribe() {
+                new PermissionUtil(this).need(permissionStr)
+                        .requestPremission(new PermissionUtil.Subscribe() {
                             @Override
                             public void onResult(boolean allGranted, ArrayList<String> grantedList, ArrayList<String> deniedList) {
                                 showToat("状态：" + allGranted);

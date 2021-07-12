@@ -1,4 +1,4 @@
-package com.feilib.permission;
+package com.feilib.tool;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -9,7 +9,6 @@ import android.util.Log;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * @Description: 请求权限
@@ -20,7 +19,7 @@ import java.util.Random;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-public class PermissionHeadle {
+public class PermissionUtil {
     private final String TAG = "PermissionHeadle";
     protected WeakReference<Activity> weakReference;
     private Activity mActivity;
@@ -30,7 +29,7 @@ public class PermissionHeadle {
     public static final int REQUESTCODE = 8999;
 
 
-    public PermissionHeadle(Activity activity){
+    public PermissionUtil(Activity activity){
         if(activity == null){
             throw new IllegalArgumentException("activity为空");
         }
@@ -59,17 +58,17 @@ public class PermissionHeadle {
         void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults);
     }
 
-    public PermissionHeadle need(String permission){
+    public PermissionUtil need(String permission){
         need(new String[]{permission});
         return this;
     }
 
-    public PermissionHeadle need(String[] permission){
+    public PermissionUtil need(String[] permission){
         mPermissions = permission;
         return this;
     }
 
-    public PermissionHeadle setOnResult(onResult onResult){
+    public PermissionUtil setOnResult(onResult onResult){
         mOnResult = onResult;
         return this;
     }

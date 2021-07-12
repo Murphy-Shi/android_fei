@@ -3,6 +3,8 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://jitpack.io" }
+        maven{ url 'https://maven.aliyun.com/repository/google'}
 //        jcenter()
     }
     dependencies {
@@ -17,6 +19,8 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://jitpack.io" }
+        maven{ url 'https://maven.aliyun.com/repository/google'}
 //        jcenter() // Warning: this repository is going to shut down soon
     }
 }

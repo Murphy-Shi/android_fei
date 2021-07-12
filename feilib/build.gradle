@@ -26,7 +26,31 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation "org.robolectric:robolectric:3.3.2"
+    testImplementation "org.assertj:assertj-core:2.6.0"
+    testImplementation "org.robolectric:robolectric:3.3.2"
+
+    testImplementation 'org.powermock:powermock-module-junit4:1.6.5'
+    testImplementation 'org.powermock:powermock-module-junit4-rule:1.6.5'
+    testImplementation 'org.powermock:powermock-api-mockito:1.6.5'
+    testImplementation 'org.powermock:powermock-classloading-xstream:1.6.5'
+//    testImplementation 'org.junit.jupiter:junit-jupiter'
+//    testImplementation 'org.junit.jupiter:junit-jupiter'
+//    testImplementation 'org.junit.jupiter:junit-jupiter'
+//    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+//    androidTestImplementation 'junit:junit:4.13.2'
+//    androidTestImplementation 'org.junit.jupiter:junit-jupiter'
+
 }
