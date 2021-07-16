@@ -96,7 +96,7 @@ public class GsonUtil {
 
         private <T> T getReflexDefault(JsonReader in) {
             try {
-                if(className == null || className.equals("")){
+                if(className == null || "".equals(className)){
                     return null;
                 }
 
