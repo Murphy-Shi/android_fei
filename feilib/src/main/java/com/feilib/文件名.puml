@@ -5,6 +5,9 @@ title Fei文件
 * com.feilib
 ** 权限：permission
 ** tool
+*** EncryptUtil
+**** 正常加密 md5(String string)
+**** 加盐：md5(String string, String slat)
 ***  软键盘遮挡:KeyboradHandle
 
 @endmindmap
