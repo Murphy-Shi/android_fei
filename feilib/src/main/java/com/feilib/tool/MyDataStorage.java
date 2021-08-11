@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -34,7 +35,7 @@ public class MyDataStorage {
     private final Context mContext;
     private static final String DEFAULT = "default";
 
-    MyDataStorage(Context context) {
+    public MyDataStorage(Context context) {
         this.mContext = context;
     }
 
@@ -68,7 +69,6 @@ public class MyDataStorage {
         return sharedPreferencesGetAll(group);
     }
 
-
     //获取raw的资源
     public void getRaw(int id) {
         getResource(id, "", "", null);
@@ -97,6 +97,16 @@ public class MyDataStorage {
     //将file文件写入
     public void writeFile(File file, String path) {
         writeFileToDevice("", file, path);
+    }
+
+    //将内容写进sdcard
+    public void writeSdcard(String fileName, String content) {
+        sdcardManage(true, fileName, content);
+    }
+
+    //读取sdcard内容
+    public StringBuilder readSdcard(String fileName) {
+        return sdcardManage(false, fileName, "");
     }
 
     /**
@@ -139,7 +149,6 @@ public class MyDataStorage {
         return sharedPreferences.getAll();
     }
 
-
     /**
      * Context.MODE_PRIVATE	指定该文件数据只能被本应用程序读、写
      * Context.MODE_WORLD_READABLE	指定该文件数据能被其他应用程序读，但不能写
@@ -165,10 +174,8 @@ public class MyDataStorage {
                 inputStream = mContext.getResources().getAssets().open(assetName);
             } else if (!"".equals(fileName)) {
                 fileInputStream = mContext.openFileInput(fileName);
-
             } else {
                 inputStream = new FileInputStream(file);
-
             }
 
             if (!"".equals(fileName)) {
@@ -230,7 +237,6 @@ public class MyDataStorage {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                ;
             }
         }
     }
@@ -257,7 +263,7 @@ public class MyDataStorage {
         return buffer;
     }
 
-    private boolean checkRWPermission(){
+    private boolean checkRWPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             boolean isRead = mContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == PackageManager.PERMISSION_DENIED;
             boolean isWrite = mContext.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") == PackageManager.PERMISSION_DENIED;
@@ -267,11 +273,100 @@ public class MyDataStorage {
         return true;
     }
 
-    private void requestRWPermissions(){
+    private StringBuilder sdcardManage(boolean isWrite, String fileName, String content) {
+        StringBuilder result = new StringBuilder();
+        if (mContext == null || fileName == null || "".equals(fileName)) {
+            Log.e(TAG, Thread.currentThread().getStackTrace()[2].getMethodName() + "传入的context、fileName不能为空");
+            return result;
+        }
+//        if (!checkRWPermission()) {
+//            //申请权限
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                ((Activity) mContext).requestPermissions(new String[]{"android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"}, 6889);
+//            }
+//            return result;
+//        }
 
+        if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            Log.e(TAG, Thread.currentThread().getStackTrace()[2].getMethodName() + "检测不到sd卡的存在或挂载");
+            return result;
+        }
+
+        if (isWrite) {
+            writeToSdcard(fileName, content);
+        } else {
+            result = readToSdcard(fileName);
+        }
+
+        return result;
     }
 
-    private void writeToSdcard(){
+    private void writeToSdcard(String fileName, String content) {
+        FileOutputStream fileOutputStream = null;
+        try {
+            File storage = mContext.getExternalFilesDir(null);
+            File tmepfile = new File(storage.getPath());
+            if (!tmepfile.exists()) {
+                tmepfile.mkdirs();
+            }
 
+            File file1 = new File(tmepfile, fileName);
+            if (!file1.exists()) {
+                file1.createNewFile();
+
+            }
+            fileOutputStream = new FileOutputStream(file1);
+            fileOutputStream.write(content.getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (fileOutputStream != null) {
+                try {
+                    fileOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private StringBuilder readToSdcard(String fileName) {
+        InputStream inputStream = null;
+        Reader reader = null;
+        BufferedReader bufferedReader = null;
+        StringBuilder result = new StringBuilder();
+
+        try {
+            File storage = mContext.getExternalFilesDir(null);
+            File tmepfile = new File(storage.getPath());
+            File file = new File(tmepfile, fileName);
+            inputStream = new FileInputStream(file);
+            reader = new InputStreamReader(inputStream);
+            bufferedReader = new BufferedReader(reader);
+
+            String temp;
+            while ((temp = bufferedReader.readLine()) != null) {
+                result.append(temp);
+            }
+            Log.i(TAG, "result:" + result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                if (bufferedReader != null) {
+                    bufferedReader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
     }
 }

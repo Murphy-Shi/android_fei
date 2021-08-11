@@ -1,16 +1,19 @@
 plugins {
     id 'com.android.library'
+
 }
 
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
+
+
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "3.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -54,5 +57,10 @@ dependencies {
 
 //    androidTestImplementation 'junit:junit:4.13.2'
 //    androidTestImplementation 'org.junit.jupiter:junit-jupiter'
+
+    //谷歌支付
+    implementation "com.android.billingclient:billing:4.0.0"
+    //kt版本
+    implementation "com.android.billingclient:billing-ktx:4.0.0"
 
 }

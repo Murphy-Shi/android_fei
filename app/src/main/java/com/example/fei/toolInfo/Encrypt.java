@@ -30,7 +30,7 @@ import javax.crypto.Cipher;
  * @Version: 1.0
  */
 public class Encrypt {
-    public void test(Activity activity){
+    public void test(Activity activity) {
         String str = "123456";
         System.out.println("一次加密：" + EncryptUtil.md5(str));
         System.out.println("二次加密：" + EncryptUtil.md5(str, 2));
@@ -72,13 +72,12 @@ public class Encrypt {
             // 密钥与数字签名获取
             Map<String, Object> keyMap = EncryptUtil.getKeyPair();
             String publicKey = EncryptUtil.getKey(keyMap, true);
-            Log.e("haha","rsa获取公钥： " + publicKey);
+            Log.e("haha", "rsa获取公钥： " + publicKey);
             String privateKey = EncryptUtil.getKey(keyMap, false);
             Log.e("haha", "rsa获取私钥： " + privateKey);
 
             // 公钥加密私钥解密
-            byte[] rsaPublic =
-                    EncryptUtil.rsa(data, publicKey, EncryptUtil.RSA_PUBLIC_ENCRYPT);
+            byte[] rsaPublic = EncryptUtil.rsa(data, publicKey, EncryptUtil.RSA_PUBLIC_ENCRYPT);
             System.out.println("rsa公钥加密： " + new String(rsaPublic));
             System.out.println("rsa私钥解密： " + new String(
                     EncryptUtil.rsa(rsaPublic, privateKey, EncryptUtil.RSA_PRIVATE_DECRYPT)));
