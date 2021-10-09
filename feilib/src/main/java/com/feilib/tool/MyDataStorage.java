@@ -120,7 +120,7 @@ public class MyDataStorage {
      * (1) commit()有boolen返回值代表插入是否成功，apply()没有。
      * (2) apply()将数据原子操作提交到内存，然后异步提交到磁盘。commit()是同步提交到硬盘。
      */
-    private void sharedPreferencesSave(String group, String key, String value) {
+    private void sharedPreferencesSave(String group , String key, String value) {
         if (mContext == null || key == null || value == null) {
             Log.e(TAG, "传入的Activity、key、value不能为null");
             return;

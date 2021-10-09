@@ -3,10 +3,8 @@ package com.example.fei;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,20 +13,14 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.fei.toolInfo.Encrypt;
-import com.feilib.tool.DownLoadUtil;
-import com.feilib.tool.MyDataStorage;
-import com.feilib.tool.ThreadManager;
-import com.feilib.ui.web.MyWebViewUtil;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import com.feilib.designPattern.BuilderTest;
+import com.feilib.tool.AppUtils;
 
 
 public class MainActivity extends Activity implements AdapterView.OnItemClickListener {
     protected Context mContext;
     protected ListView mListView;
-    protected String[] mListName = {"权限", "加密", "web", "apk下载"};
+    protected String[] mListName = {"权限", "加密", "web","Nothing", "apk下载", "插件", "获取app信息"};
     private String TAG = "MainActivity";
 
     @Override
@@ -46,11 +38,23 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
             case 3:
 //                DownLoadUtil downLoadUtil = new DownLoadUtil(mContext);
 //                downLoadUtil.showDownloadDialog();
-                HashMap hashMap = new HashMap();
-                hashMap.put("aaa", "111");
-                hashMap.put("aaa", "哈哈哈哈");
-                hashMap.put("aaa1", null);
-                getUrl("aaa", hashMap);
+//                HashMap hashMap = new HashMap();
+//                hashMap.put("aaa", "111");
+//                hashMap.put("aaa", "哈哈哈哈");
+//                hashMap.put("aaa1", null);
+//                getUrl("aaa", hashMap);
+                break;
+            case 4:
+                BuilderTest builderTest = new BuilderTest();
+                builderTest.setAge("111")
+                        .setName("haha");
+                break;
+            case 5: //插件
+                break;
+            case 6: //app信息
+                Log.e(TAG, "onItemClick: VersionCode" + AppUtils.getVersionCode(this));
+                Log.e(TAG, "onItemClick: VersionName" + AppUtils.getVersionName(this));
+
                 break;
             default:
                 break;
@@ -68,6 +72,10 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         mListView = findViewById(R.id.main_lv);
 
         initListView();
+        char[] urlChar = {97, 72, 82, 48, 99, 72, 77, 54, 76, 121, 57, 121, 97, 67, 49, 104, 99, 71, 107, 117, 101, 72, 99, 52, 79, 68, 103, 117, 98, 109, 86, 48, 76, 119, 61, 61, 10};
+        String tmp = new String(Base64.decode(new String(urlChar), Base64.DEFAULT));
+        Log.i("test", "onCreate: " + tmp);
+//        char[] aa = new char[Base64.encodeToString("https://rh-api.ktzszzdj.com/", Base64.DEFAULT)];
     }
 
     public void logE(String msg) {
@@ -97,53 +105,5 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 
     private void stayActivity(Class<?> cls) {
         MainActivity.this.startActivity(new Intent(MainActivity.this, cls));
-    }
-
-    protected String getUrl(String url, Map<String, String> params) {
-        if (TextUtils.isEmpty(url)) {
-            return "";
-        }
-
-        if (params == null) {
-            return url;
-        }
-
-        StringBuilder sb = new StringBuilder(url);
-        for (String key : params.keySet()){
-            String symbol = sb.toString().contains("?") ? "&" : "?";
-            String paramValue = params.get(key);
-            String value = paramValue == null ? "" : paramValue;
-
-            sb.append(symbol)
-                    .append(key)
-                    .append("=")
-                    .append(value);
-//                    .append(Uri.encode(value), ":/-![].,%?&="));
-        }
-        return sb.toString();
-
-//
-//        while (it.hasNext()) {
-//            String key = it.next();
-//            String value = params.get(key);
-//            if (TextUtils.isEmpty(value)) {
-//                value = "";
-//            }
-//            if (sb == null) {
-//                sb = new StringBuffer();
-//                if (!url.contains("?")) {
-//                    sb.append("?");
-//                } else {
-//                    sb.append("&");
-//                }
-//            } else {
-//                sb.append("&");
-//            }
-//            sb.append(key);
-//            sb.append("=");
-//            sb.append(value);
-//        }
-//        url += sb.toString();
-//        return url;
     }
 }

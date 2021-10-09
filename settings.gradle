@@ -1,4 +1,4 @@
 rootProject.name = "android_fei"
 include ':app'
 include ':feilib'
-include ':test'
+include ':game_assets'

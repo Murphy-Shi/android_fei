@@ -1,13 +1,51 @@
 package com.feilib.tool;
 
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+
+import com.feilib.BuildConfig;
 
 public final class AppUtils {
     private AppInfo mAppInfo;
 
     private AppUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
+    //获取版本名
+    public static String getVersionName(Context context) {
+        return getPackageInfo(context).versionName;
+    }
+
+    //获取版本号
+    public static long getVersionCode(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            return getPackageInfo(context).getLongVersionCode();
+        } else {
+            return getPackageInfo(context).versionCode;
+        }
+    }
+
+    //通过PackageInfo得到的想要启动的应用的包名
+    private static PackageInfo getPackageInfo(Context context) {
+        PackageInfo pInfo = null;
+
+        try {
+            //通过PackageManager可以得到PackageInfo
+            PackageManager pManager = context.getPackageManager();
+            pInfo = pManager.getPackageInfo(context.getPackageName(),
+                    PackageManager.GET_CONFIGURATIONS);
+
+            return pInfo;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return pInfo;
     }
 
     /**

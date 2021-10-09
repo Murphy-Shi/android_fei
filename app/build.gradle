@@ -1,19 +1,18 @@
 plugins {
     id 'com.android.application'
+    id 'android-junk-code'
 }
 
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
-    assetPacks = [":test"]
-
     defaultConfig {
         applicationId "com.mengchongcx.tw"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 30
-        versionCode 2
-        versionName "2.0"
+        versionCode 1
+        versionName "1.0"
     }
 
     buildTypes {
@@ -26,9 +25,36 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-//    buildFeatures {
-//        viewBinding true
-//    }
+
+    for (String i in project.gradle.startParameter.taskNames){
+        if (i.contains("bundle")){
+            assetPacks = [":game_assets"]
+        } else {
+            sourceSets {
+                main {
+                    assets.srcDirs = ['../game_assets/src/main/assets', 'src/main/assets']
+                }
+            }
+        }
+    }
+
+
+
+
+//    println project.gradle.startParameter.taskNames
+
+    android.applicationVariants.all { variant ->
+        androidJunkCode.configMap.put(variant.name, {
+            packageBase = "com.abc.game"  //生成java类根包名
+            packageCount = 30 //生成包数量
+            activityCountPerPackage = 3 //每个包下生成Activity类数量
+            otherCountPerPackage = 50  //每个包下生成其它类的数量
+            methodCountPerClass = 20  //每个类下生成方法数量
+            resPrefix = "color_"  //生成的layout、drawable、string等资源名前缀
+            drawableCount = 300  //生成drawable资源数量
+            stringCount = 300  //生成string数量
+        })
+    }
 }
 
 dependencies {
@@ -47,6 +73,6 @@ dependencies {
 //    androidTestImplementation 'org.junit.jupiter:junit-jupiter'
     api project(path: ':feilib')
 
-    implementation 'com.google.android.play:core:1.10.0'
+//    implementation 'com.google.android.play:core:1.10.0'
 
 }
